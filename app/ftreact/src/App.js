@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import {Route, BrowserRouter} from 'react-router-dom'
+import logo from './logo.svg'
+import './App.css'
+import Game from './tic/index.js'
 
-class App extends Component {
-  render() {
+class Home extends Component {
+  render () {
     return (
       <div className="App">
         <header className="App-header">
@@ -21,8 +23,21 @@ class App extends Component {
           </a>
         </header>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+class App extends Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <div>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/tic" component={Game} />
+        </div>
+      </BrowserRouter>
+    )
+  }
+}
+
+export default App
