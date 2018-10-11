@@ -1,0 +1,19 @@
+version: '2'
+services:
+  node_react:
+    container_name: node_react
+    build: ./
+    image: 'node_react:latest'
+    working_dir: /usr/src/app/ftreact
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - '3000:3000'
+    # This is a dependency free script to make this container keep running
+    # command: 'node app.js'
+    command: 'npm start'
+
+networks:
+  default:
+    external:
+      name: docker_node_default
