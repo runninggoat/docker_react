@@ -1,0 +1,23 @@
+.bg-blur {
+  width: 100%;
+  height: 100%;
+  /* background-repeat: no-repeat;
+  background-size: cover; */
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 99;
+  -webkit-filter: blur(5px);
+  filter: url('/media/blur.svg#blur');
+  filter: blur(5px);
+}
+
+.text {
+  position: relative;
+  color: white;
+  background: rgba(34, 34, 34, 0.35);
+  padding-left: 30px;
+  z-index: 100;
+}
