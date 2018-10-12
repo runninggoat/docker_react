@@ -12,7 +12,11 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2017,
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
+  plugins: ['import', 'jsx-a11y', 'react'],
   rules: {
     'comma-dangle': ['error', 'always-multiline'],
     semi: ['error', 'never'],
