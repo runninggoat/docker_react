@@ -6,7 +6,7 @@ import { Layout } from 'antd'
 import BG from './content/backgroud.js'
 import Head from './head/head.js'
 
-const { Header, Footer, Sider, Content } = Layout
+const { Header, Footer, Content } = Layout
 
 class AntT extends Component {
 

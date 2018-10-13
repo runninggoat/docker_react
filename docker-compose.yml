@@ -1,12 +1,16 @@
 version: '2'
 services:
   node_react:
+    image: node:8
     container_name: node_react
     build: ./
-    image: 'node_react:latest'
+    # image: 'node_react:latest'
+    # working_dir: /usr/src/app
     working_dir: /usr/src/app/ftreact
     volumes:
       - ./app:/usr/src/app
+    expose:
+      - '3000'
     ports:
       - '3000:3000'
     # This is a dependency free script to make this container keep running
