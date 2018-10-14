@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import 'antd/dist/antd.css'
 import './style.css'
 import { DatePicker } from 'antd'
 import { Layout } from 'antd'
