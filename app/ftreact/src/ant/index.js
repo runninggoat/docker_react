@@ -4,6 +4,7 @@ import { DatePicker } from 'antd'
 import { Layout } from 'antd'
 import BG from './content/backgroud.js'
 import Head from './head/head.js'
+import Cont from './content/content.js'
 
 const { Header, Footer, Content } = Layout
 
@@ -34,6 +35,7 @@ class AntT extends Component {
                 <Head src={ source }></Head>
               </Header>
             </BG>
+            <Cont></Cont>
           </Content>
           <Footer>Footer</Footer>
         </Layout>
