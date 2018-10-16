@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Card1 from './card1/card1.js'
+import ReduxTest from './reduxtest.js'
+import UserTest from './usertest.js'
 
 class Cont extends Component {
   render () {
@@ -10,6 +12,11 @@ class Cont extends Component {
           width={ 300 }
           percent={ 80 }
         ></Card1>
+        <hr />
+        <ReduxTest></ReduxTest>
+        <hr />
+        <UserTest></UserTest>
+        <hr />
       </div>
     )
   }
