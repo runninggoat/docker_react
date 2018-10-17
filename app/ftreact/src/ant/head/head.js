@@ -50,6 +50,7 @@ class Head extends Component {
         position: this.state.stick ? 'fixed' : 'relative',
         width: this.state.stick ? '100%' : '',
         backgroundColor: this.state.stick ? 'black' : '',
+        zIndex: 999,
       }}>
         { bg }
         <div className="text">
