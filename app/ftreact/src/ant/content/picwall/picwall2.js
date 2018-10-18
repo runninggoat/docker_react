@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Icon, Modal } from 'antd'
+import { documentIcon, pdfIcon, videoIcon } from './iconB64'
 
 class PicWall2 extends Component {
   constructor(props) {
@@ -12,12 +13,14 @@ class PicWall2 extends Component {
           uid: '-1',
           name: 'xxx.png',
           status: 'done',
-          url:
-            'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          type: 'image',
         },
       ],
     }
     this.handleSelect = this.handleSelect.bind(this)
+    this.determineFileType = this.determineFileType.bind(this)
+    this.generateUid = this.generateUid.bind(this)
   }
 
   handleCancel = () => this.setState({ previewVisible: false })
@@ -31,8 +34,74 @@ class PicWall2 extends Component {
 
   handleChange = ({ fileList }) => this.setState({ fileList })
 
+  determineFileType (type) {
+    let fileType = 'UNKNOW'
+    if (type.indexOf('application') > -1) {
+      if (type.indexOf('application/pdf') > -1) {
+        fileType = 'PDF'
+      }
+    } else if (type.indexOf('video') > -1) {
+      fileType = 'VIDEO'
+    } else if (type.indexOf('image') > -1) {
+      fileType = 'IMG'
+    }
+    return fileType
+  }
+
+  generateUid () {
+    const now = new Date()
+    const r = Math.ceil(Math.random() * 10)
+    return `ft-upload-${now.getTime()}-${r}`
+  }
+
   handleSelect (e) {
-    console.log(e.target.value)
+    const file = e.target.files[0]
+    for (let i = 0; i < this.state.fileList.length; i++) {
+      if (file.name === this.state.fileList[i].name) {
+        // File has been selected
+        return
+      }
+    }
+    console.log(file)
+    const fileType = this.determineFileType(file.type)
+    const reader = new FileReader()
+    reader.onload = (file => {
+      return ev => {
+        // console.log(ev.target.result)
+        let thumbUrl = 'data:image/png;base64,'
+        switch(fileType) {
+          case 'PDF': {
+            thumbUrl = pdfIcon
+            break
+          }
+          case 'VIDEO': {
+            thumbUrl = videoIcon
+            break
+          }
+          case 'IMG': {
+            thumbUrl = ev.target.result
+            break
+          }
+          default: {
+            thumbUrl = documentIcon
+          }
+        }
+        let newFileList = this.state.fileList.slice()
+        newFileList.push({
+          uid: this.generateUid(),
+          name: file.name,
+          thumbUrl: thumbUrl,
+          type: fileType,
+          file: file,
+        })
+        this.setState((state) => {
+          return {
+            fileList: newFileList,
+          }
+        })
+      }
+    })(file)
+    reader.readAsDataURL(file)
   }
 
   render() {
@@ -47,14 +116,35 @@ class PicWall2 extends Component {
           padding: '5px',
           border: '1px dashed #ddd',
           borderRadius: '5px',
-          background: '#2D2E2D',
+          background: '#F1F2F1',
           textAlign: 'center',
           marginRight: '5px',
+          position: 'relative',
         }}>
           <img alt="File" src={ file.url || file.thumbUrl } style={{
             width: 'auto',
             height: '100%',
           }} />
+          <div style={{
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            width: '100%',
+            textAlign: 'center',
+            background: 'linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
+            // background: '-moz-linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
+            // background: '-o-linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
+            // background: '-webkit-linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
+          }}>
+            <span style={{
+              color: 'white',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: '1',
+            }}>{ file.name }</span>
+          </div>
         </div>
       )
     })
@@ -84,6 +174,7 @@ class PicWall2 extends Component {
             <input
               type="file"
               name="aaa"
+              accept=".pdf,.mp4,.png,.jpg,.jpeg,.gif,.svg"
               onChange={ this.handleSelect }
               style={{
                 position: 'absolute',
