@@ -104,23 +104,39 @@ class PicWall2 extends Component {
     reader.readAsDataURL(file)
   }
 
+  handleDelete (idx, e) {
+    console.log(idx)
+    if (idx < this.state.fileList.length) {
+      let newFileList = this.state.fileList.slice()
+      newFileList.splice(idx, 1)
+      this.setState((state) => {
+        return {
+          fileList: newFileList,
+        }
+      })
+    }
+  }
+
   render() {
     const w = '160px', h = '120px'
     const { previewVisible, previewImage, fileList } = this.state
     const files = fileList.map((file, idx) => {
       return (
-        <div key={ file.uid } style={{
-          width: w,
-          height: h,
-          overflow: 'hidden',
-          padding: '5px',
-          border: '1px dashed #ddd',
-          borderRadius: '5px',
-          background: '#F1F2F1',
-          textAlign: 'center',
-          marginRight: '5px',
-          position: 'relative',
-        }}>
+        <div
+          key={ file.uid }
+          style={{
+            width: w,
+            height: h,
+            overflow: 'hidden',
+            padding: '5px',
+            border: '1px dashed #ddd',
+            borderRadius: '5px',
+            background: '#F1F2F1',
+            textAlign: 'center',
+            marginRight: '5px',
+            position: 'relative',
+          }}
+        >
           <img alt="File" src={ file.url || file.thumbUrl } style={{
             width: 'auto',
             height: '100%',
@@ -144,6 +160,17 @@ class PicWall2 extends Component {
               WebkitBoxOrient: 'vertical',
               WebkitLineClamp: '1',
             }}>{ file.name }</span>
+          </div>
+          <div
+            onClick={ this.handleDelete.bind(this, idx) }
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              fontSize: '20px',
+            }}
+          >
+            <Icon type="delete" theme="outlined" />
           </div>
         </div>
       )
