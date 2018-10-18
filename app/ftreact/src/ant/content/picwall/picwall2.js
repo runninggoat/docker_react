@@ -8,6 +8,7 @@ class PicWall2 extends Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
+      coverIdx: 0,
       fileList: [
         {
           uid: '-1',
@@ -112,15 +113,43 @@ class PicWall2 extends Component {
       this.setState((state) => {
         return {
           fileList: newFileList,
+          coverIdx: 0,
         }
       })
     }
+  }
+
+  handleCover (idx) {
+    this.setState((state) => {
+      return {
+        coverIdx: idx,
+      }
+    })
   }
 
   render() {
     const w = '160px', h = '120px'
     const { previewVisible, previewImage, fileList } = this.state
     const files = fileList.map((file, idx) => {
+      let cover = null
+      if (idx === this.state.coverIdx) {
+        cover = (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: 'rgba(45, 46, 45, 0.3)',
+              color: 'white',
+            }}
+          >
+            <Icon type="picture" theme="outlined" style={{ marginTop: '30px', fontSize: '30px' }} />
+            <p>封面</p>
+          </div>
+        )
+      }
       return (
         <div
           key={ file.uid }
@@ -137,10 +166,16 @@ class PicWall2 extends Component {
             position: 'relative',
           }}
         >
-          <img alt="File" src={ file.url || file.thumbUrl } style={{
-            width: 'auto',
-            height: '100%',
-          }} />
+          <img
+            onClick={ this.handleCover.bind(this, idx) }
+            alt="File"
+            src={ file.url || file.thumbUrl }
+              style={{
+              width: 'auto',
+              height: '100%',
+            }}
+          />
+          { cover }
           <div style={{
             position: 'absolute',
             left: 0,
