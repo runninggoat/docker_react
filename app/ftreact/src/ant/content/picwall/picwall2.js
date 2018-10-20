@@ -9,6 +9,7 @@ class PicWall2 extends Component {
       previewVisible: false,
       previewImage: '',
       coverIdx: 0,
+      inputFile: '',
       fileList: [
         {
           uid: '-1',
@@ -56,14 +57,20 @@ class PicWall2 extends Component {
   }
 
   handleSelect (e) {
+    // console.log('handleSelected...')
     const file = e.target.files[0]
+    if (!file) {
+      // console.log('no file selected.')
+      return
+    }
     for (let i = 0; i < this.state.fileList.length; i++) {
       if (file.name === this.state.fileList[i].name) {
         // File has been selected
+        // console.log('file exists in list.')
         return
       }
     }
-    console.log(file)
+    // console.log(file)
     const fileType = this.determineFileType(file.type)
     const reader = new FileReader()
     reader.onload = (file => {
@@ -103,6 +110,12 @@ class PicWall2 extends Component {
       }
     })(file)
     reader.readAsDataURL(file)
+    // Clear input value to fix ignoring bug
+    this.setState((state) => {
+      return {
+        inputFile: '',
+      }
+    })
   }
 
   handleDelete (idx, e) {
@@ -156,7 +169,6 @@ class PicWall2 extends Component {
           style={{
             width: w,
             height: h,
-            overflow: 'hidden',
             padding: '5px',
             border: '1px dashed #ddd',
             borderRadius: '5px',
@@ -166,15 +178,21 @@ class PicWall2 extends Component {
             position: 'relative',
           }}
         >
-          <img
-            onClick={ this.handleCover.bind(this, idx) }
-            alt="File"
-            src={ file.url || file.thumbUrl }
-              style={{
-              width: 'auto',
-              height: '100%',
-            }}
-          />
+          <div style={{
+            width: '100%',
+            height: '100%',
+            overflow: 'hidden',
+          }}>
+            <img
+              onClick={ this.handleCover.bind(this, idx) }
+              alt="File"
+              src={ file.url || file.thumbUrl }
+                style={{
+                width: 'auto',
+                height: '100%',
+              }}
+            />
+          </div>
           { cover }
           <div style={{
             position: 'absolute',
@@ -237,6 +255,7 @@ class PicWall2 extends Component {
               type="file"
               name="aaa"
               accept=".pdf,.mp4,.png,.jpg,.jpeg,.gif,.svg"
+              value={ this.state.inputFile }
               onChange={ this.handleSelect }
               style={{
                 position: 'absolute',
