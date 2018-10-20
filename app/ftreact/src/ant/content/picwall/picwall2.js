@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Icon, Modal } from 'antd'
 import { documentIcon, pdfIcon, videoIcon } from './iconB64'
-
+import FilePreview from './filepreview.js'
 class PicWall2 extends Component {
   constructor(props) {
     super(props)
@@ -21,6 +21,8 @@ class PicWall2 extends Component {
       ],
     }
     this.handleSelect = this.handleSelect.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+    this.handleCover = this.handleCover.bind(this)
     this.determineFileType = this.determineFileType.bind(this)
     this.generateUid = this.generateUid.bind(this)
   }
@@ -57,7 +59,7 @@ class PicWall2 extends Component {
   }
 
   handleSelect (e) {
-    // console.log('handleSelected...')
+    console.log('handleSelected...')
     const file = e.target.files[0]
     if (!file) {
       // console.log('no file selected.')
@@ -119,7 +121,7 @@ class PicWall2 extends Component {
   }
 
   handleDelete (idx, e) {
-    console.log(idx)
+    console.log('handleDelete...', idx)
     if (idx < this.state.fileList.length) {
       let newFileList = this.state.fileList.slice()
       newFileList.splice(idx, 1)
@@ -133,6 +135,7 @@ class PicWall2 extends Component {
   }
 
   handleCover (idx) {
+    console.log('handleCover...')
     this.setState((state) => {
       return {
         coverIdx: idx,
@@ -164,68 +167,16 @@ class PicWall2 extends Component {
         )
       }
       return (
-        <div
+        <FilePreview
           key={ file.uid }
-          style={{
-            width: w,
-            height: h,
-            padding: '5px',
-            border: '1px dashed #ddd',
-            borderRadius: '5px',
-            background: '#F1F2F1',
-            textAlign: 'center',
-            marginRight: '5px',
-            position: 'relative',
-          }}
-        >
-          <div style={{
-            width: '100%',
-            height: '100%',
-            overflow: 'hidden',
-          }}>
-            <img
-              onClick={ this.handleCover.bind(this, idx) }
-              alt="File"
-              src={ file.url || file.thumbUrl }
-                style={{
-                width: 'auto',
-                height: '100%',
-              }}
-            />
-          </div>
-          { cover }
-          <div style={{
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            textAlign: 'center',
-            background: 'linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
-            // background: '-moz-linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
-            // background: '-o-linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
-            // background: '-webkit-linear-gradient(rgba(45, 46, 45, 0.1), rgba(45, 46, 45, 1.0))',
-          }}>
-            <span style={{
-              color: 'white',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: '1',
-            }}>{ file.name }</span>
-          </div>
-          <div
-            onClick={ this.handleDelete.bind(this, idx) }
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              fontSize: '20px',
-            }}
-          >
-            <Icon type="delete" theme="outlined" />
-          </div>
-        </div>
+          w={ w }
+          h={ h }
+          cover={ cover }
+          file={ file }
+          idx={ idx }
+          handleCover={ this.handleCover }
+          handleDelete={ this.handleDelete }
+        ></FilePreview>
       )
     })
     return (
