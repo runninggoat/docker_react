@@ -10,9 +10,9 @@ services:
     volumes:
       - ./app:/usr/src/app
     expose:
-      - '3000'
+      - '3001'
     ports:
-      - '3000:3000'
+      - '3001:3001'
     # This is a dependency free script to make this container keep running
     # command: 'node app.js'
     command: 'npm start'
