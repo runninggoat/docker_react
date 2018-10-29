@@ -1,41 +1,17 @@
 import React, { Component } from 'react'
-import store from '../../store.js'
+import { connect } from 'react-redux'
 
-export default class ReduxTest extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      count: null,
-    }
-    store.subscribe(() => {
-      this.setState((state) => {
-        return {
-          count: store.getState(),
-        }
-      })
-    })
-    this.handlePlus = this.handlePlus.bind(this)
-    this.handleMinus = this.handleMinus.bind(this)
+class ReduxT extends Component {
+  handlePlus (e) {
+    this.props.increase()
   }
 
-  componentDidMount () {
-    this.setState((state) => {
-      return {
-        count: store.getState().counter,
-      }
-    })
-  }
-
-  handlePlus () {
-    store.dispatch({ type: 'INCREMENT' })
-  }
-
-  handleMinus () {
-    store.dispatch({ type: 'DECREMENT' })
+  handleMinus (e) {
+    this.props.decrease()
   }
 
   render () {
-    const count = store.getState().counter
+    const count = this.props.counter
     return (
       <div style={{
         display: 'flex',
@@ -45,7 +21,7 @@ export default class ReduxTest extends Component {
           { `State ${count}` }
         </h1>
         <button
-          onClick={ this.handlePlus }
+          onClick={ this.handlePlus.bind(this) }
           style={{
             marginLeft: '50px',
           }}
@@ -53,7 +29,7 @@ export default class ReduxTest extends Component {
           { '+' }
         </button>
         <button
-          onClick={ this.handleMinus }
+          onClick={ this.handleMinus.bind(this) }
           style={{
             marginLeft: '50px',
           }}
@@ -64,3 +40,23 @@ export default class ReduxTest extends Component {
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    counter: state.counter,
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    increase: () => { dispatch({ type: 'INCREMENT' }) },
+    decrease: () => { dispatch({ type: 'DECREMENT' }) },
+  }
+}
+
+const ReduxTest = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReduxT)
+
+export default ReduxTest

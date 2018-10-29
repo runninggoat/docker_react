@@ -1,43 +1,14 @@
 import React, { Component } from 'react'
-import store from '../../store.js'
+import { connect } from 'react-redux'
 
-class UserTest extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      un: '',
-      ui: '',
-      userName: null,
-      uid: null,
-    }
-    store.subscribe(() => {
-      this.setState((state) => {
-        return {
-          userName: store.getState().user.userName,
-          uid: store.getState().user.uid,
-        }
-      })
-    })
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleUN = this.handleUN.bind(this)
-    this.handleUI = this.handleUI.bind(this)
+class UserT extends Component {
+  state = {
+    un: '',
+    ui: '',
   }
 
-  componentDidMount () {
-    this.setState((state) => {
-      return {
-        userName: store.getState().user.userName,
-        uid: store.getState().user.uid,
-      }
-    })
-  }
-
-  handleSubmit () {
-    store.dispatch({
-      type: 'LOGIN',
-      userName: this.state.un,
-      uid: this.state.ui,
-    })
+  handleSubmit (un, ui, e) {
+    this.props.submit(un, ui)
   }
 
   handleUN (e) {
@@ -65,17 +36,48 @@ class UserTest extends Component {
       }}>
         <div>
           <h1>
-            { `User Name: ${this.state.userName}; UID: ${this.state.uid}` }
+            { `User Name: ${this.props.user.userName}; UID: ${this.props.user.uid}` }
           </h1>
-          <input placeholder="User Name" value={ this.state.un } onChange={ this.handleUN } />
-          <input placeholder="UID" value={ this.state.ui } onChange={ this.handleUI } />
+          <input
+            placeholder="User Name"
+            value={ this.state.un }
+            onChange={ this.handleUN.bind(this) }
+          />
+          <input
+            placeholder="UID"
+            value={ this.state.ui }
+            onChange={ this.handleUI.bind(this) }
+          />
           <button
-            onClick={ this.handleSubmit }
+            onClick={ this.handleSubmit.bind(this, this.state.un, this.state.ui) }
           >Submit</button>
         </div>
       </div>
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.user,
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    submit: (userName, uid) => {
+      dispatch({
+        type: 'LOGIN',
+        userName: userName,
+        uid: uid,
+      })
+    },
+  }
+}
+
+const UserTest = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(UserT)
 
 export default UserTest
