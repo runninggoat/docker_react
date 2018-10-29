@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import store from '../../store.js'
 
-class ReduxTest extends Component {
+export default class ReduxTest extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -64,5 +64,3 @@ class ReduxTest extends Component {
     )
   }
 }
-
-export default ReduxTest
