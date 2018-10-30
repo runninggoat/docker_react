@@ -6,6 +6,7 @@ import logo from './logo.svg'
 import './App.css'
 import Game from './tic/index.js'
 import AntT from './ant/index.js'
+import BlurTest from './blur/blur_test'
 
 class Home extends Component {
   render () {
@@ -39,6 +40,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/tic" component={Game} />
             <Route exact path="/ant" component={AntT} />
+            <Route exact path="/blur" component={BlurTest} />
           </div>
         </BrowserRouter>
       </Provider>
